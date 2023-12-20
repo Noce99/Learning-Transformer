@@ -12,19 +12,7 @@ python3 -m venv ./
 source bin/activate
 ```
 ```
-pip install torch==1.11
-```
-```
-pip install torchtext==0.6
-```
-```
-pip install pandas
-```
-```
-pip install spacy
-```
-```
-pip install dill
+pip install -r requirements.txt
 ```
 ```
 python -m spacy download en_core_web_sm
