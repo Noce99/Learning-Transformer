@@ -1,5 +1,5 @@
 import torch
-from torchtext.legacy import data
+from torchtext import data
 import numpy as np
 from torch.autograd import Variable
 
@@ -11,6 +11,8 @@ def nopeak_mask(size, opt):
 
 def create_masks(src, trg, opt):
     
+    # print(f"(src != opt.src_pad).unsqueeze(-2) = {(src != opt.src_pad).unsqueeze(-2).shape}")
+    # opt.src_pad = 1
     src_mask = (src != opt.src_pad).unsqueeze(-2).to(opt.device)
 
     if trg is not None:

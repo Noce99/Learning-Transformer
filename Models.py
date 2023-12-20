@@ -4,6 +4,8 @@ from Layers import EncoderLayer, DecoderLayer
 from Embed import Embedder, PositionalEncoder
 from Sublayers import Norm
 import copy
+from math import prod
+
 
 def get_clones(module, N):
     return nn.ModuleList([copy.deepcopy(module) for i in range(N)])
@@ -46,7 +48,6 @@ class Transformer(nn.Module):
         self.out = nn.Linear(d_model, trg_vocab)
     def forward(self, src, trg, src_mask, trg_mask):
         e_outputs = self.encoder(src, src_mask)
-        #print("DECODER")
         d_output = self.decoder(trg, e_outputs, src_mask, trg_mask)
         output = self.out(d_output)
         return output

@@ -2,7 +2,7 @@ import argparse
 import time
 import torch
 from Models import get_model
-from Process import *
+from Process import read_data, create_fields, create_dataset, get_len
 import torch.nn.functional as F
 from Optim import CosineWithRestarts
 from Batch import create_masks
@@ -27,13 +27,15 @@ def train_model(model, opt):
             torch.save(model.state_dict(), 'weights/model_weights')
                     
         for i, batch in enumerate(opt.train): 
-
+                   
             src = batch.src.transpose(0, 1).to(opt.device)
             trg = batch.trg.transpose(0, 1).to(opt.device)
+            
             trg_input = trg[:, :-1]
             src_mask, trg_mask = create_masks(src, trg_input, opt)
             src_mask.to(opt.device)
             trg_mask.to(opt.device)
+                        
             preds = model(src, trg_input, src_mask, trg_mask)
             ys = trg[:, 1:].contiguous().view(-1)
             opt.optimizer.zero_grad()
@@ -95,6 +97,7 @@ def main():
 
     read_data(opt)
     SRC, TRG = create_fields(opt)
+    
     opt.train = create_dataset(opt, SRC, TRG)
     model = get_model(opt, len(SRC.vocab), len(TRG.vocab))
 

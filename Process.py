@@ -1,6 +1,6 @@
 import pandas as pd
 import torchtext
-from torchtext.legacy import data
+from torchtext import data
 from Tokenize import tokenize
 from Batch import MyIterator, batch_size_fn
 import os
@@ -23,10 +23,15 @@ def read_data(opt):
             quit()
 
 def create_fields(opt):
-    
+    shortcut = {"en": "en_core_web_sm", "fr": "fr_core_news_sm"}
+    if opt.src_lang in shortcut:
+        opt.src_lang = shortcut[opt.src_lang]
+    if opt.trg_lang in shortcut:
+        opt.trg_lang = shortcut[opt.trg_lang]
+        
     spacy_langs = ['en_core_web_sm', 'fr_core_news_sm', 'de', 'es', 'pt', 'it', 'nl']
     if opt.src_lang not in spacy_langs:
-        print('invalid src language: ' + opt.src_lang + 'supported languages : ' + str(spacy_langs))
+        print('invalid src language: ' + opt.src_lang + 'supported languages : ' + str(spacy_langs)) 
     if opt.trg_lang not in spacy_langs:
         print('invalid trg language: ' + opt.trg_lang + 'supported languages : ' + str(spacy_langs))
     
@@ -47,7 +52,7 @@ def create_fields(opt):
             print("error opening SRC.pkl and TXT.pkl field files, please ensure they are in " + opt.load_weights + "/")
             quit()
         
-    return(SRC, TRG)
+    return SRC, TRG
 
 def create_dataset(opt, SRC, TRG):
 
@@ -55,7 +60,7 @@ def create_dataset(opt, SRC, TRG):
 
     raw_data = {'src' : [line for line in opt.src_data], 'trg': [line for line in opt.trg_data]}
     df = pd.DataFrame(raw_data, columns=["src", "trg"])
-    
+        
     mask = (df['src'].str.count(' ') < opt.max_strlen) & (df['trg'].str.count(' ') < opt.max_strlen)
     df = df.loc[mask]
 
