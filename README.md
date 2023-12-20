@@ -1,3 +1,43 @@
+# Set Up
+```
+git clone https://github.com/Noce99/Learning-Transformer.git
+```
+```
+cd Learning-Transformer/
+```
+```
+python3 -m venv ./
+```
+```
+source bin/activate
+```
+```
+pip install torch==1.11
+```
+```
+pip install torchtext==0.6
+```
+```
+pip install pandas
+```
+```
+pip install spacy
+```
+```
+pip install dill
+```
+```
+python -m spacy download en_core_web_sm
+```
+```
+python -m spacy download fr_core_news_sm
+```
+Test if everything it's working:
+```
+python train.py -src_data data/english.txt -trg_data data/french.txt -src_lang en -trg_lang fr -epochs 10 -no_cuda
+```
+
+
 # Transformer
 
 This is a pytorch implementation of the transformer model. If you'd like to understand the model, or any of the code better, please refer to <a href=https://towardsdatascience.com/how-to-code-the-transformer-in-pytorch-24db27c8f9ec>my tutorial</a>.
